@@ -1,24 +1,51 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Tab1.css';
+import React, {useEffect, useState} from 'react';
+import { IonItem, IonLabel, IonList } from '@ionic/react';
+import DataTable, { TableColumn } from 'react-data-table-component';
+import axios from 'axios';
+import { idCard } from 'ionicons/icons';
 
 const Tab1: React.FC = () => {
+
+  const [data, setdata] = useState([])
+
+  const visualizar = () => {
+    axios({
+      method: 'get',
+      url: 'http://localhost:8000/',
+    }).then(function (response) {
+      setdata(response.data);
+    });
+  }
+  useEffect(() => {
+    visualizar();
+  }, []);
+
+  const columns: TableColumn<{ id: number; nome: string; email: number; city: string; }>[] = [
+    {
+      name: 'ID',
+      selector: (row) => row.id,
+      sortable: true
+    },
+    {
+      name: 'Nome',
+      selector: (row) => row.nome,
+      sortable: true
+    },
+    {
+      name: 'email',
+      selector: (row) => row.email,
+      sortable: true
+    }
+  ];
+
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Tab 1</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
-      </IonContent>
-    </IonPage>
+      <DataTable
+        title="Dados dos Usuários"
+        columns={columns}
+        data={data}
+        pagination
+        selectableRows
+      />
   );
 };
 

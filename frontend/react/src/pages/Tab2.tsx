@@ -1,24 +1,33 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Tab2.css';
+import React, {useState} from 'react';
+import { IonInput, IonItem, IonList, IonButton } from '@ionic/react';
+import axios from 'axios';
 
 const Tab2: React.FC = () => {
+  const [nome, setnome] = useState("")
+  const [email, setemail] = useState("")
+
+  const salvar = () => {
+    axios({
+      method: 'post',
+      url: 'http://localhost:8000/add/',
+      data: {
+        name: nome,
+        email: email
+      }
+    });    
+  }
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Tab 2</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 2</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer name="Tab 2 page" />
-      </IonContent>
-    </IonPage>
+    <IonList>
+      <IonItem>
+        <IonInput label="Nome" onIonInput={(e: any) => setnome(e.target.value)}></IonInput>
+      </IonItem>
+      <IonItem>
+        <IonInput label="email" onIonInput={(e: any) => setemail(e.target.value)}></IonInput>
+      </IonItem>
+      <IonItem>
+        <IonButton slot="end" color="success" onClick={salvar}>Salvar</IonButton>
+      </IonItem>
+    </IonList>
   );
 };
 
